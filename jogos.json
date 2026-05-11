@@ -1,0 +1,16 @@
+[
+    {
+        "id": 2,
+        "nome": "FIFA 23",
+        "tipo": "Esporte",
+        "nota": 7,
+        "review": "Bom para jogar com amigos."
+    },
+    {
+        "nome": "Elden Ring",
+        "tipo": "RPG",
+        "nota": 9,
+        "review": "Desafiador e visualmente impecável.",
+        "id": 3
+    }
+]
