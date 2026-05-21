@@ -2,8 +2,10 @@ import json
 import os
 from fastapi import FastAPI, HTTPException, status, Response
 from pydantic import BaseModel
+from flask_cors import CORS
 
 app = FastAPI(title="API Mobile - Biblioteca de Jogos")
+CORS(app)
 
 # Arquivo onde os dados ficarão salvos para sempre (Persistência)
 ARQUIVO_DADOS = "jogos.json"
