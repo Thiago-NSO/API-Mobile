@@ -1,18 +1,16 @@
-import json
-import os
 from fastapi import FastAPI, HTTPException, status, Response
-from fastapi.middleware.cors import CORSMiddleware # <--- Importe o CORS do FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="API Mobile - Biblioteca de Jogos")
 
-# Configuração correta do CORS para o FastAPI
+# Configuração exata baseada na documentação oficial do FastAPI
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Permite que qualquer front-end (como o Expo) acesse a API
-    allow_credentials=False,
-    allow_methods=["*"], # Permite GET, POST, PUT, DELETE
-    allow_headers=["*"],
+    allow_origins=["*"],     # Permite acesso de qualquer lugar (Expo, Navegador, etc.)
+    allow_credentials=False, # OBRIGATÓRIO ser False quando allow_origins for ["*"]
+    allow_methods=["*"],     # Libera todos os métodos (GET, POST, PUT, DELETE)
+    allow_headers=["*"],     # Libera todos os cabeçalhos
 )
 
 # Arquivo onde os dados ficarão salvos para sempre (Persistência)
