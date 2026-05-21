@@ -1,11 +1,19 @@
 import json
 import os
 from fastapi import FastAPI, HTTPException, status, Response
+from fastapi.middleware.cors import CORSMiddleware # <--- Importe o CORS do FastAPI
 from pydantic import BaseModel
-from flask_cors import CORS
 
 app = FastAPI(title="API Mobile - Biblioteca de Jogos")
-CORS(app)
+
+# Configuração correta do CORS para o FastAPI
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # Permite que qualquer front-end (como o Expo) acesse a API
+    allow_credentials=True,
+    allow_methods=["*"], # Permite GET, POST, PUT, DELETE
+    allow_headers=["*"],
+)
 
 # Arquivo onde os dados ficarão salvos para sempre (Persistência)
 ARQUIVO_DADOS = "jogos.json"
