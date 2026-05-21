@@ -10,7 +10,7 @@ app = FastAPI(title="API Mobile - Biblioteca de Jogos")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], # Permite que qualquer front-end (como o Expo) acesse a API
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"], # Permite GET, POST, PUT, DELETE
     allow_headers=["*"],
 )
