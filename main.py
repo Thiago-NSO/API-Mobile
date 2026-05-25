@@ -1,6 +1,10 @@
+import os
+import json
 from fastapi import FastAPI, HTTPException, status, Response
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+
+# ... resto do seu código ...
 
 app = FastAPI(title="API Mobile - Biblioteca de Jogos")
 
