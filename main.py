@@ -4,20 +4,18 @@ from fastapi import FastAPI, HTTPException, status, Response
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
-# ... resto do seu código ...
-
 app = FastAPI(title="API Mobile - Biblioteca de Jogos")
 
-# Configuração exata baseada na documentação oficial do FastAPI
+# CORS totalmente liberado
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],     # Permite acesso de qualquer lugar (Expo, Navegador, etc.)
-    allow_credentials=False, # OBRIGATÓRIO ser False quando allow_origins for ["*"]
-    allow_methods=["*"],     # Libera todos os métodos (GET, POST, PUT, DELETE)
-    allow_headers=["*"],     # Libera todos os cabeçalhos
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# Arquivo onde os dados ficarão salvos para sempre (Persistência)
+# Arquivo onde os dados ficarão salvos (Persistência)
 ARQUIVO_DADOS = "jogos.json"
 
 # ==========================================
@@ -54,7 +52,7 @@ class JogoRequest(BaseModel):
     review: str
 
 # ==========================================
-# ENDPOINTS (As rotas que vão pro Thunder Client)
+# ENDPOINTS
 # ==========================================
 
 @app.post("/login")
@@ -79,10 +77,10 @@ def buscar_jogo(id: int):
 def cadastrar_jogo(jogo_novo: JogoRequest):
     jogos = carregar_dados()
     novo_id = max([jogo["id"] for jogo in jogos], default=0) + 1
-    
+
     novo_jogo_dict = jogo_novo.model_dump()
     novo_jogo_dict["id"] = novo_id
-    
+
     jogos.append(novo_jogo_dict)
     salvar_dados(jogos)
     return novo_jogo_dict
@@ -94,7 +92,7 @@ def atualizar_jogo(id: int, jogo_atualizado: JogoRequest):
         if jogo["id"] == id:
             dados_atualizados = jogo_atualizado.model_dump()
             dados_atualizados["id"] = id
-            
+
             jogos[index] = dados_atualizados
             salvar_dados(jogos)
             return dados_atualizados
