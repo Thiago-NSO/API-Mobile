@@ -1,8 +1,9 @@
-import os
 import json
-from fastapi import FastAPI, HTTPException, status, Response
-from pydantic import BaseModel
+import os
+
+from fastapi import FastAPI, HTTPException, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 app = FastAPI(title="API Mobile - Biblioteca de Jogos")
 
@@ -22,28 +23,45 @@ ARQUIVO_DADOS = "jogos.json"
 # FUNÇÕES DO BANCO DE DADOS (JSON)
 # ==========================================
 
+
 def carregar_dados():
     if not os.path.exists(ARQUIVO_DADOS):
         dados_iniciais = [
-            {"id": 1, "nome": "The Legend of Zelda", "tipo": "Aventura", "nota": 10, "review": "Um clássico absoluto."},
-            {"id": 2, "nome": "FIFA 23", "tipo": "Esporte", "nota": 7, "review": "Bom para jogar com amigos."}
+            {
+                "id": 1,
+                "nome": "The Legend of Zelda",
+                "tipo": "Aventura",
+                "nota": 10,
+                "review": "Um clássico absoluto.",
+            },
+            {
+                "id": 2,
+                "nome": "FIFA 23",
+                "tipo": "Esporte",
+                "nota": 7,
+                "review": "Bom para jogar com amigos.",
+            },
         ]
         salvar_dados(dados_iniciais)
         return dados_iniciais
     with open(ARQUIVO_DADOS, "r", encoding="utf-8") as file:
         return json.load(file)
 
+
 def salvar_dados(dados):
     with open(ARQUIVO_DADOS, "w", encoding="utf-8") as file:
         json.dump(dados, file, indent=4, ensure_ascii=False)
+
 
 # ==========================================
 # MODELOS DE DADOS
 # ==========================================
 
+
 class LoginRequest(BaseModel):
     email: str
     password: str
+
 
 class JogoRequest(BaseModel):
     nome: str
@@ -51,9 +69,11 @@ class JogoRequest(BaseModel):
     nota: int
     review: str
 
+
 # ==========================================
 # ENDPOINTS
 # ==========================================
+
 
 @app.post("/login")
 def login(dados: LoginRequest):
@@ -61,9 +81,11 @@ def login(dados: LoginRequest):
         return {"token": "550e8400-e29b-41d4-a716-446655440000"}
     raise HTTPException(status_code=401, detail="Credenciais inválidas")
 
+
 @app.get("/jogos")
 def listar_jogos():
     return carregar_dados()
+
 
 @app.get("/jogos/{id}")
 def buscar_jogo(id: int):
@@ -72,6 +94,7 @@ def buscar_jogo(id: int):
         if jogo["id"] == id:
             return jogo
     raise HTTPException(status_code=404, detail="Jogo não encontrado")
+
 
 @app.post("/jogos", status_code=status.HTTP_201_CREATED)
 def cadastrar_jogo(jogo_novo: JogoRequest):
@@ -85,6 +108,7 @@ def cadastrar_jogo(jogo_novo: JogoRequest):
     salvar_dados(jogos)
     return novo_jogo_dict
 
+
 @app.put("/jogos/{id}")
 def atualizar_jogo(id: int, jogo_atualizado: JogoRequest):
     jogos = carregar_dados()
@@ -97,6 +121,7 @@ def atualizar_jogo(id: int, jogo_atualizado: JogoRequest):
             salvar_dados(jogos)
             return dados_atualizados
     raise HTTPException(status_code=404, detail="Jogo não encontrado")
+
 
 @app.delete("/jogos/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def deletar_jogo(id: int):
